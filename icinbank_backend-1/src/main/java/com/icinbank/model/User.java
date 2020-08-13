@@ -21,11 +21,19 @@ public class User {
 	private String email;
 	private String username;
 	private String password;
+	private boolean status;
+	
 	
 //	@OneToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "aid")
 //	private Account account;
 	
+	public boolean isStatus() {
+		return status;
+	}
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 	public Integer getId() {
 		return id;
 	}

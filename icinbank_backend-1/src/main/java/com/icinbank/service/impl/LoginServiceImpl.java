@@ -25,6 +25,10 @@ public class LoginServiceImpl implements LoginService{
 		String hashedPassword = DigestUtils.sha256Hex(login.getPassword());
 		try {
 			user=dao.findByUsername(login.getUsername());
+			if(user.isStatus()) {
+				flag = false;
+				message = "Dear Mr/Ms."+user.getFname()+" your account has been blocked for security reasons.";
+			}
 			if(!hashedPassword.equals(user.getPassword())) {
 				flag = false;
 				message = "Username or password is incorrect";
@@ -34,6 +38,7 @@ public class LoginServiceImpl implements LoginService{
 			flag = false;
 			message = "Username or password is incorrect";
 		}
+		
 		response.setLoginStatus(flag);
 		response.setResponseMessage(message);
 		response.setUsername(user.getUsername());

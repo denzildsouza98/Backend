@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.icinbank.model.Account;
 import com.icinbank.model.TransactionDetails;
 import com.icinbank.model.Transfer;
 import com.icinbank.model.TransferDetails;
 import com.icinbank.model.UserHistory;
+import com.icinbank.response.DepositResponse;
+import com.icinbank.response.TransferResponse;
+import com.icinbank.response.WithdrawResponse;
 import com.icinbank.service.AccountService;
 import com.icinbank.service.TransferHistoryService;
 import com.icinbank.service.UserHistoryService;
@@ -32,18 +33,18 @@ public class AccountController {
 	private TransferHistoryService tservice;
 	
 	@PostMapping("/deposit")
-	public Account deposit(@RequestBody TransactionDetails details) {
+	public DepositResponse deposit(@RequestBody TransactionDetails details) {
 		return service.deposit(details.getAccount(), details.getAmount());
 	}
 
 	@PostMapping("/withdraw")
-	public Account withdraw(@RequestBody TransactionDetails details) {
+	public WithdrawResponse withdraw(@RequestBody TransactionDetails details) {
 		return service.withdraw(details.getAccount(), details.getAmount());
 	}
 
 	@PostMapping("/transfer")
-	public void transfer(@RequestBody TransferDetails details) {
-		service.transfer(details.getSaccount(), details.getRaccount(), details.getAmount());
+	public TransferResponse transfer(@RequestBody TransferDetails details) {
+		return service.transfer(details.getSaccount(), details.getRaccount(), details.getAmount());
 	}
 	
 	@GetMapping("/getHistory/{account}")
