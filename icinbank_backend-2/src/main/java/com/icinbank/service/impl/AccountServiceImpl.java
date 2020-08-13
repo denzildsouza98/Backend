@@ -119,6 +119,18 @@ public class AccountServiceImpl implements AccountService{
 		response.setSaccount(saccount);
 	return response;
 	}
+
+	@Override
+	public Account getAccountDetails(int account) {
+		// TODO Auto-generated method stub
+		return dao.findByAccno(account);
+	}
+
+	@Override
+	public Account updateAccount(Account account) {
+		// TODO Auto-generated method stub
+		return dao.save(account);
+	}
 	
 
 }
