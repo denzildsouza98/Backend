@@ -18,5 +18,11 @@ public class ProfileServiceImpl implements ProfileService{
 		// TODO Auto-generated method stub
 		return dao.save(user);
 	}
+
+	@Override
+	public User getUser(String username) {
+		// TODO Auto-generated method stub
+		return dao.findByUsername(username);
+	}
 	
 }
