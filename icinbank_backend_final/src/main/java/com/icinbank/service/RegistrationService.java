@@ -6,4 +6,7 @@ public interface RegistrationService {
 
 	public RegisterResponse createAccount(User details); 
 	public boolean usernameAlreadyExists(String username);
+	public boolean EmailAlreadyExists(String email);
+	public boolean PanAlreadyExists(String pan);
+	public boolean PhoneAlreadyExists(long l);
 }

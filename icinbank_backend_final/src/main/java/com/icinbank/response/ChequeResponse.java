@@ -1,16 +1,15 @@
 package com.icinbank.response;
 
-public class WithdrawResponse {
-
-	private boolean withdrawStatus;
+public class ChequeResponse {
+	
+	private boolean status;
 	private String responseMessage;
 	private int account;
-	
-	public boolean isWithdrawStatus() {
-		return withdrawStatus;
+	public boolean isStatus() {
+		return status;
 	}
-	public void setWithdrawStatus(boolean withdrawStatus) {
-		this.withdrawStatus = withdrawStatus;
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 	public String getResponseMessage() {
 		return responseMessage;

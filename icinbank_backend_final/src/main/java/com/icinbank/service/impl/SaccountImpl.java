@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.icinbank.dao.AccountRepository;
 import com.icinbank.dao.SaccountRepository;
+import com.icinbank.dao.UserRepository;
 import com.icinbank.model.Account;
 import com.icinbank.model.Saccount;
+import com.icinbank.model.User;
 import com.icinbank.response.DepositResponse;
 import com.icinbank.response.TransferResponse;
 import com.icinbank.response.WithdrawResponse;
@@ -31,11 +33,16 @@ public class SaccountImpl implements SaccountService{
 	@Autowired
 	private AccountRepository adao;
 	
+	@Autowired
+	private UserRepository udao;
+	
 	@Override
 	public Saccount newAccount(String username) {
 		Saccount account =new Saccount();
 		account.setUsername(username);
 		account.setAccno(generate_saving());
+		User user=udao.findByUsername(username);
+		account.setUser(user);	
 		return dao.save(account);
 	}
 

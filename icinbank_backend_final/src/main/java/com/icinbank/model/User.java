@@ -1,5 +1,6 @@
 package com.icinbank.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,14 +22,36 @@ public class User {
 	private String email;
 	private String username;
 	private String password;
+	
+	@Column(columnDefinition = "boolean default false")
 	private boolean status;
 	
+	@Column(columnDefinition = "boolean default false")
+	private boolean authorizationStatus;
+    @Column(columnDefinition = "integer default 3",nullable=false)
+	private int featureStatus=3;
+
 	public boolean isStatus() {
 		return status;
 	}
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
+	public boolean isAuthorizationStatus() {
+		return authorizationStatus;
+	}
+	public void setAuthorizationStatus(boolean authorizationStatus) {
+		this.authorizationStatus = authorizationStatus;
+	}
+	public int getFeatureStatus() {
+		return featureStatus;
+	}
+	public void setFeatureStatus(int featureStatus) {
+		this.featureStatus = featureStatus;
+	}
+	
+	
+	
 	public Integer getId() {
 		return id;
 	}
