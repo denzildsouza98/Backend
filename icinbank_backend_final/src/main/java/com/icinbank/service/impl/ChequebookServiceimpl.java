@@ -10,7 +10,7 @@ import com.icinbank.dao.AccountRepository;
 import com.icinbank.dao.ChequeBookRepository;
 import com.icinbank.dao.SaccountRepository;
 import com.icinbank.model.Account;
-import com.icinbank.model.Chequebook;
+import com.icinbank.model.ChequebookRequest;
 import com.icinbank.model.Saccount;
 import com.icinbank.response.ChequeResponse;
 import com.icinbank.service.ChequebookService;
@@ -28,7 +28,7 @@ public class ChequebookServiceimpl implements ChequebookService{
 	private SaccountRepository sdao;
 
 	@Override
-	public ChequeResponse createrequest(Chequebook chequebook) {
+	public ChequeResponse createrequest(ChequebookRequest chequebook) {
 		ChequeResponse response=new ChequeResponse();
 		int account = chequebook.getAccount();
 		LocalDate today = LocalDate.now();
@@ -43,8 +43,8 @@ public class ChequebookServiceimpl implements ChequebookService{
 			chequebook.setAccType("Primary");
 			chequebook.setDate(today);
 			chequebook.setRequestStatus(false);
+			//dao.save(chequebook);
 			dao.save(chequebook);
-			
 			}
 			catch(Exception e) {
 				response.setAccount(account);
@@ -83,7 +83,7 @@ public class ChequebookServiceimpl implements ChequebookService{
 	}
 
 	@Override
-	public List<Chequebook> getRequests(int account) {
+	public List<ChequebookRequest> getRequests(int account) {
 		// TODO Auto-generated method stub
 		return dao.findByAccount(account);
 	}

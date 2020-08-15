@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.icinbank.model.Chequebook;
+import com.icinbank.model.ChequebookRequest;
 
-public interface ChequeBookRepository extends JpaRepository<Chequebook, Integer>{
+public interface ChequeBookRepository extends JpaRepository<ChequebookRequest, Integer>{
 
-	public List<Chequebook> findByAccount(int account);
+	public List<ChequebookRequest> findByAccount(int account);
 }

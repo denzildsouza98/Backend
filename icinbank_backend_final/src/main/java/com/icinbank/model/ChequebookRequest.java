@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Chequebook {
+public class ChequebookRequest {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.icinbank.dao.AccountRepository;
+import com.icinbank.dao.SaccountRepository;
 import com.icinbank.details.TransactionDetails;
 import com.icinbank.details.TransferDetails;
 import com.icinbank.model.Account;
@@ -39,6 +41,14 @@ public class AccountController {
 	
 	@Autowired
 	private TransferHistoryService tservice;
+	
+	@Autowired
+	private AccountRepository adao;
+	
+	@Autowired
+	private SaccountRepository sdao;
+	
+	private final String ifsc="ICIN7465";
 	
 	@PutMapping("/account/profile")
 	public Account updateProfile(@RequestBody Account account) {
@@ -86,13 +96,44 @@ public class AccountController {
 
 	@PostMapping("/account/transfer")
 	public TransferResponse transfer(@RequestBody TransferDetails details) {
-		String len = Integer.toString(details.getSaccount());
-		if(len.length()==7) {
-		return service.transfer(details.getSaccount(), details.getRaccount(), details.getAmount());
-		}
-		else
-		{
-			return sservice.transfer(details.getSaccount(), details.getRaccount(), details.getAmount());
+		try {
+			if(details.getIfsc().equals(ifsc)) 
+			{
+						Account p=adao.findByUsername(details.getUsername());
+						Saccount s=sdao.findByUsername(details.getUsername());
+						
+						if(p.getAccno()==details.getSaccount() || s.getAccno()==details.getSaccount()) {
+						String len = Integer.toString(details.getSaccount());
+						if(len.length()==7) {
+						return service.transfer(details.getSaccount(), details.getRaccount(), details.getAmount());
+						}
+						else
+						{
+							return sservice.transfer(details.getSaccount(), details.getRaccount(), details.getAmount());
+						}
+						}
+						else {
+							TransferResponse response=new TransferResponse();
+							response.setSaccount(details.getSaccount());
+							response.setResponseMessage("Dear user You can only transfer funds from the accounts registed with you");
+							response.setTransferStatus(false);
+							return response;
+			}
+			}
+			else {
+				TransferResponse response=new TransferResponse();
+						response.setSaccount(details.getSaccount());
+						response.setResponseMessage("IFSC code is incorrect");
+						response.setTransferStatus(false);
+						return response;
+			}
+		} catch (Exception e) {
+			TransferResponse response=new TransferResponse();
+			response.setSaccount(details.getSaccount());
+			response.setResponseMessage("Please provide an IFSC code");
+			response.setTransferStatus(false);
+			return response;
+			
 		}
 	}
 	
