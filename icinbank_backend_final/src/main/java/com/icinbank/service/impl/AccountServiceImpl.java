@@ -191,6 +191,16 @@ public class AccountServiceImpl implements AccountService{
 		// TODO Auto-generated method stub
 		return dao.save(account);
 	}
+
+	@Override
+	public Account getAccount(String username) {
+		// TODO Auto-generated method stub
+		try {
+			return dao.findByUsername(username);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 	
 
 

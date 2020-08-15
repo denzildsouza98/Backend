@@ -177,5 +177,15 @@ public class SaccountImpl implements SaccountService{
 	return response;
 	}
 
+	@Override
+	public Saccount getAccount(String username) {
+		try {
+			return dao.findByUsername(username);
+		} catch (Exception e) {
+			return null;
+		}
+		
+	}
+
 	
 }

@@ -6,6 +6,7 @@ import com.icinbank.response.TransferResponse;
 import com.icinbank.response.WithdrawResponse;
 
 public interface SaccountService {
+	public Saccount getAccount(String username);
 	public Saccount newAccount(String username);
 	public DepositResponse deposit(int acc,int amount);
 	public WithdrawResponse withdraw(int acc,int amount);

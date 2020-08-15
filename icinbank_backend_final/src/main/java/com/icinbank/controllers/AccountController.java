@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.icinbank.details.TransactionDetails;
 import com.icinbank.details.TransferDetails;
 import com.icinbank.model.Account;
+import com.icinbank.model.Saccount;
 import com.icinbank.model.Transfer;
 import com.icinbank.model.UserHistory;
 import com.icinbank.response.DepositResponse;
@@ -42,6 +43,16 @@ public class AccountController {
 	@PutMapping("/account/profile")
 	public Account updateProfile(@RequestBody Account account) {
 		return service.updateAccount(account);
+	}
+	
+	@GetMapping("/account/getprimary/{username}")
+	public Account getPrimarydetails(@PathVariable("username") String username) {
+		return service.getAccount(username);
+	}
+	
+	@GetMapping("/account/getsaving/{username}")
+	public Saccount getSavingdetails(@PathVariable("username") String username) {
+		return sservice.getAccount(username);
 	}
 	
 	@GetMapping("/account/details/{account}")
