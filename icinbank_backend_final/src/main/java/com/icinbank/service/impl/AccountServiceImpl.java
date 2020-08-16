@@ -36,6 +36,7 @@ public class AccountServiceImpl implements AccountService{
 	@Autowired
 	private SaccountRepository sdao;
 	
+	
 	@Override
 	public Account newAccount(String username) {
 		Account account=new Account();
@@ -66,6 +67,7 @@ public class AccountServiceImpl implements AccountService{
 	@Override
 	public DepositResponse deposit(int acc, int amount) {
 		DepositResponse response=new DepositResponse();
+		
 		boolean flag=true;
 		try {
 			Account account=dao.findByAccno(acc);
@@ -90,7 +92,9 @@ public class AccountServiceImpl implements AccountService{
 		boolean flag=true;
 		try {
 			Account account=dao.findByAccno(acc);
-			
+			User user=udao.findByUsername(account.getUsername());
+			if(user.getFeatureStatus()==2 || user.getFeatureStatus()==3)
+			{
 			if(account.getBalance()>=amount) 
 				{
 					account.setBalance(account.getBalance()-amount);
@@ -105,6 +109,12 @@ public class AccountServiceImpl implements AccountService{
 					response.setResponseMessage("Insufficient funds to complete the transaction");
 					response.setWithdrawStatus(flag);
 				}
+			}
+			else {
+				flag=false;
+				response.setResponseMessage("This function is not available for your account");
+				response.setWithdrawStatus(flag);
+			}
 			
 		} 
 		
@@ -131,6 +141,10 @@ public class AccountServiceImpl implements AccountService{
 			if(senderAccount.getAccno()!=receiverAccount.getAccno()) 
 			{
 				if(senderAccount.getBalance()>amount) {
+					User user=udao.findByUsername(senderAccount.getUsername());
+					
+					if(user.getFeatureStatus()==3) 
+					{
 					senderAccount.setBalance(senderAccount.getBalance()-amount);
 					receiverAccount.setBalance(receiverAccount.getBalance()+amount);
 					tservice.addAction(saccount, raccount, amount);
@@ -139,6 +153,12 @@ public class AccountServiceImpl implements AccountService{
 					response.setResponseMessage("Rs."+amount+" successfully transferred to account "+receiverAccount.getAccno());
 					response.setTransferStatus(flag);
 					}
+					else {
+						flag=false;
+						response.setResponseMessage("This feature is not available for your account");
+						response.setTransferStatus(flag);
+					}
+				}
 				else {
 					flag=false;
 					response.setResponseMessage("Insufficient funds to complete the transfer");
@@ -157,6 +177,11 @@ public class AccountServiceImpl implements AccountService{
 				if(senderAccount.getAccno()!=receiverAccount.getAccno()) 
 				{
 					if(senderAccount.getBalance()>amount) {
+						
+						User user=udao.findByUsername(senderAccount.getUsername());
+						
+						if(user.getFeatureStatus()==3) 
+							{
 						senderAccount.setBalance(senderAccount.getBalance()-amount);
 						receiverAccount.setBalance(receiverAccount.getBalance()+amount);
 						tservice.addAction(saccount, raccount, amount);
@@ -164,6 +189,12 @@ public class AccountServiceImpl implements AccountService{
 						sdao.save(receiverAccount);
 						response.setResponseMessage("Rs."+amount+" successfully transferred to account "+receiverAccount.getAccno());
 						response.setTransferStatus(flag);
+							}
+						else {
+							flag=false;
+							response.setResponseMessage("This function isnt available for the account");
+							response.setTransferStatus(flag);
+						}
 						}
 					else {
 						flag=false;

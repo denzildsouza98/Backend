@@ -26,9 +26,17 @@ public class LoginServiceImpl implements LoginService{
 		String hashedPassword = DigestUtils.sha256Hex(login.getPassword());
 		try {
 			user=dao.findByUsername(login.getUsername());
-			if(user.isStatus()) {
+			if(!user.isStatus()) {
 				flag = false;
 				message = "Dear Mr/Ms."+user.getFname()+" your account has been blocked for security reasons.";
+			}
+			if(!user.isAuthorizationStatus()) {
+				flag = false;
+				message = "Dear Mr/Ms."+user.getFname()+" your account has not been activated yet";
+			}
+			if(!user.isAuthorizationStatus()) {
+				flag = false;
+				message = "Dear Mr/Ms."+user.getFname()+" your account has not been activated yet";
 			}
 			if(!hashedPassword.equals(user.getPassword())) {
 				flag = false;

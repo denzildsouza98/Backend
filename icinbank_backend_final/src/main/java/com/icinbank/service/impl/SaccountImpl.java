@@ -89,6 +89,9 @@ public class SaccountImpl implements SaccountService{
 		
 		try {
 			Saccount account=dao.findByAccno(acc);
+			User user=udao.findByUsername(account.getUsername());
+			if(user.getFeatureStatus()==2 || user.getFeatureStatus()==3)
+			{
 			
 			if(account.getBalance()>=amount) 
 				{
@@ -104,6 +107,12 @@ public class SaccountImpl implements SaccountService{
 				response.setResponseMessage("Insufficient funds to complete the transaction");
 				response.setWithdrawStatus(flag);
 				}
+			}
+			else {
+				flag=false;
+				response.setResponseMessage("This function is not available for your account");
+				response.setWithdrawStatus(flag);
+			}
 		} catch (Exception e) {
 			flag=false;
 			response.setResponseMessage("Account number is incorrect");
@@ -126,14 +135,24 @@ public class SaccountImpl implements SaccountService{
 				if(senderAccount.getAccno()!=receiverAccount.getAccno()) 
 				{
 				if(senderAccount.getBalance()>=amount) {
-					senderAccount.setBalance(senderAccount.getBalance()-amount);
-					receiverAccount.setBalance(receiverAccount.getBalance()+amount);
-					tservice.addAction(saccount, raccount, amount);
-					dao.save(senderAccount);
-					adao.save(receiverAccount);
-					response.setResponseMessage("Rs."+amount+" successfully transferred to account "+receiverAccount.getAccno());
-					response.setTransferStatus(flag);
+					User user=udao.findByUsername(senderAccount.getUsername());
+					
+					if(user.getFeatureStatus()==3) 
+					{
+						senderAccount.setBalance(senderAccount.getBalance()-amount);
+						receiverAccount.setBalance(receiverAccount.getBalance()+amount);
+						tservice.addAction(saccount, raccount, amount);
+						dao.save(senderAccount);
+						adao.save(receiverAccount);
+						response.setResponseMessage("Rs."+amount+" successfully transferred to account "+receiverAccount.getAccno());
+						response.setTransferStatus(flag);
 					}
+					else {
+						flag=false;
+						response.setResponseMessage("This feature is not available for your account");
+						response.setTransferStatus(flag);
+					}
+				}
 				else 
 					{
 					flag=false;
@@ -152,28 +171,42 @@ public class SaccountImpl implements SaccountService{
 				Saccount receiverAccount=dao.findByAccno(raccount);
 				if(senderAccount.getAccno()!=receiverAccount.getAccno()) 
 				{
+					
 					if(senderAccount.getBalance()>amount) {
-						senderAccount.setBalance(senderAccount.getBalance()-amount);
-						receiverAccount.setBalance(receiverAccount.getBalance()+amount);
-						tservice.addAction(saccount, raccount, amount);
-						dao.save(senderAccount);
-						dao.save(receiverAccount);
-						response.setResponseMessage("Rs."+amount+" successfully transferred to account "+receiverAccount.getAccno());
-						response.setTransferStatus(flag);
+						User user=udao.findByUsername(senderAccount.getUsername());
+						
+						if(user.getFeatureStatus()==3) 
+							{
+								senderAccount.setBalance(senderAccount.getBalance()-amount);
+								receiverAccount.setBalance(receiverAccount.getBalance()+amount);
+								tservice.addAction(saccount, raccount, amount);
+								dao.save(senderAccount);
+								dao.save(receiverAccount);
+								response.setResponseMessage("Rs."+amount+" successfully transferred to account "+receiverAccount.getAccno());
+								response.setTransferStatus(flag);
+							}
+						else {
+								flag=false;
+								response.setResponseMessage("This function isnt available for the account");
+								response.setTransferStatus(flag);
+							}
 						}
+					
 					else {
-						flag=false;
-						response.setResponseMessage("Insufficient funds to complete the transfer");
-						response.setTransferStatus(flag);
+							flag=false;
+							response.setResponseMessage("Insufficient funds to complete the transfer");
+							response.setTransferStatus(flag);
 						}
 				}
+				
 				else {
-					flag=false;
-					response.setResponseMessage("sender and recieiver accounts are same");
-					response.setTransferStatus(flag);
+						flag=false;
+						response.setResponseMessage("sender and recieiver accounts are same");
+						response.setTransferStatus(flag);
 				}
 			}
-		} catch (Exception e) 
+		} 
+		catch (Exception e) 
 		{
 			flag=false;
 			response.setResponseMessage("Account number is incorrect");

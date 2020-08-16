@@ -53,8 +53,8 @@ public class RegistrationServiceImpl implements RegistrationService{
 			String hashedPassword = DigestUtils.sha256Hex(user.getPassword());
 			user.setPassword(hashedPassword);
 			dao.save(user);
-			service.newAccount(user.getUsername());
-			sservice.newAccount(user.getUsername());
+			//service.newAccount(user.getUsername());
+			//sservice.newAccount(user.getUsername());
 		}
 		response.setRegistrationStatus(flag);
 		response.setResponseMessage(message);
